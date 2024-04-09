@@ -10,8 +10,15 @@ router.get('/', (req, res, next) => {   //1st arg: route, 2nd arg: handler(how w
 //we can not use "/products" again since we already defined it in app.js
 
 router.post('/', (req, res, next) => {
-    res.status(200).json({
-        message: 'Handling POST requests using /products route'
+
+    const product ={
+        name: req.body.name,
+        price: req.body.price
+    };
+
+    res.status(201).json({
+        message: 'Handling POST requests using /products route',
+        createdProduct: product
     });
 });
 
