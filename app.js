@@ -2,13 +2,40 @@
 const express = require('express');
 const app = express();
 const morgan = require('morgan');
-const bodyParser = require('body-parser')
+const bodyParser = require('body-parser');
+const mongoose = require('mongoose');
 
 // app.use((req, res, next) => {
 //     res.status(200).json({
 //         message: "It Works!!!"
 //     });
 // } );
+
+mongoose.connect('mongodb+srv://dheepthireddyv:'+ process.env.MONGO_ATLAS_PSW +'@node-rest-shop.dpjpngs.mongodb.net/?retryWrites=true&w=majority&appName=node-rest-shop',
+{
+    // useMongoClient: true
+    // useUnifiedTopology: true
+});
+
+// other way to connect DB
+
+// const url = 'mongodb+srv://dheepthireddyv:'+ process.env.MONGO_ATLAS_PSW +'@node-rest-shop.dpjpngs.mongodb.net/?retryWrites=true&w=majority&appName=node-rest-shop';
+
+// const connectionParams={
+//     useNewUrlParser: true,
+//     // useCreateIndex: true,
+//     useUnifiedTopology: true 
+// }
+// mongoose.connect(url,connectionParams)
+//     .then( () => {
+//         console.log('Connected to the database ')
+//     })
+//     .catch( (err) => {
+//         console.error(`Error connecting to the database. n${err}`);
+//     })
+
+
+
 
 app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({extended: false}));
