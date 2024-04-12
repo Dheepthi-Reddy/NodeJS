@@ -15,6 +15,9 @@ router.get('/', (req, res, next) => {
 
     Order.find()
     .select('product quantity _id')
+    .populate('product', 'name')
+    // product: name of the object we want to populate along with the orders
+    // list of properties of the object we want to populate
     .exec()
     .then(docs => {
         res.status(200).json({
@@ -106,6 +109,8 @@ router.get('/:orderId', (req, res, next) => {
 
     Order.findById(req.params.orderId)
     .select('product quantity _id')
+    .populate('product')
+    // product: name of the object we want to populate along with the orders
     .exec()
     .then(order => {
         if(!order){
