@@ -5,8 +5,10 @@ const mongoose = require('mongoose');
 const productSchema = mongoose.Schema({
     _id: mongoose.Schema.Types.ObjectId,
     //data of type mongoose
-    name: String,
-    price: Number
+    // name: String,
+    // price: Number //general implementation
+    name: { type: String, required: true },
+    price: { type: Number, required: true } // setting validation that price is a required value 
 });
 
 // we export this schema wrapped into a model
