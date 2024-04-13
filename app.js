@@ -38,6 +38,9 @@ mongoose.connect('mongodb+srv://dheepthireddyv:'+ process.env.MONGO_ATLAS_PSW +'
 
 
 app.use(morgan('dev'));
+
+app.use('/uploads',express.static('uploads')); // middleware to make the images accessible
+
 app.use(bodyParser.urlencoded({extended: false}));
 // here we have to parse which kind of bodies we want to parse
 // first we are parsing urlencoded bodies, 

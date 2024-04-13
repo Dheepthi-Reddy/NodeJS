@@ -1,6 +1,37 @@
 const express = require('express');
 const router = express.Router();   // express router like a subpackage to express framework
 const mongoose = require('mongoose');
+const multer = require('multer');
+// Multer is a node.js middleware for handling multipart/form-data, used for uploading files. 
+
+const storage = multer.diskStorage({    // storage strategy
+    destination: function(req, file, cb) {  // where the incoming file should be stored
+        cb(null, './uploads/')    // callback
+    },
+    filename: function(req, file, cb) {   // how the file should be named
+        cb(null, new Date().toISOString() + file.originalname);
+    }
+});
+
+const fileFilter = (req, file, cb) => {
+
+    if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/png'){
+        cb(null, true);
+    } else{
+        cb(null, false);    // reject a file - to not save the file
+    }
+    
+};
+
+const upload = multer({storage: storage, 
+    limits: {
+        fileSize: 1024 * 1024 * 5   // upto 5MB file
+    },
+    fileFilter: fileFilter
+});
+// folder where multer tries to store the incoming files
+//storage is the strategy we defind
+// when we want to limit the size of the image
 
 const Product = require('../models/product');
 
@@ -14,7 +45,7 @@ router.get('/', (req, res, next) => {   //1st arg: route, 2nd arg: handler(how w
 
     // to get all the products available
     Product.find()
-    .select('name price _id') //selecting the fields to fetch, to make sure no other internal things are fetched
+    .select('name price _id productImage') //selecting the fields to fetch, to make sure no other internal things are fetched
     .exec()
     .then(docs => {
         console.log(docs);
@@ -24,6 +55,7 @@ router.get('/', (req, res, next) => {   //1st arg: route, 2nd arg: handler(how w
                 return {
                     name: doc.name,
                     price: doc.price,
+                    productImage: doc.productImage,
                     _id: doc._id,
                     result: {
                         type: 'GET',
@@ -44,7 +76,9 @@ router.get('/', (req, res, next) => {   //1st arg: route, 2nd arg: handler(how w
 });
 //we can not use "/products" again since we already defined it in app.js
 
-router.post('/', (req, res, next) => {
+router.post('/', upload.single('productImage'), (req, res, next) => {
+
+    console.log(req.file);
 
     // basic functionality
     // const product ={
@@ -58,7 +92,8 @@ router.post('/', (req, res, next) => {
         _id: new mongoose.Types.ObjectId(),
         //ObjectId(): executed as a function to automatically generate a ID
         name: req.body.name,
-        price: req.body.price
+        price: req.body.price,
+        productImage: req.file.path
     });
     product
     .save()
@@ -66,7 +101,7 @@ router.post('/', (req, res, next) => {
         // save() is a method provided by mongoose to store in the database
         console.log(result);
         res.status(201).json({
-            message: 'Created product successfully',
+            message: 'Product created  successfully',
             createdProduct: {
                 name: result.name,
                 price: result.price,
@@ -106,7 +141,7 @@ router.get('/:productId', (req, res, next) => {
     // }
 
     Product.findById(id)
-    .select('name price _id')
+    .select('name price _id productImage')
     .exec()
     .then(doc => {
         console.log("From database: ",doc);

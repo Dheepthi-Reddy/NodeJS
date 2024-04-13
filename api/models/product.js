@@ -8,7 +8,8 @@ const productSchema = mongoose.Schema({
     // name: String,
     // price: Number //general implementation
     name: { type: String, required: true },
-    price: { type: Number, required: true } // setting validation that price is a required value 
+    price: { type: Number, required: true }, // setting validation that price is a required value 
+    productImage: { type: String, required: true }
 });
 
 // we export this schema wrapped into a model
