@@ -5,8 +5,9 @@ const mongoose = require('mongoose');
 const Order = require('../models/order');
 const Product = require('../models/product');
 const product = require('../models/product');
+const checkAuth = require('../middleware/check-auth');
 
-router.get('/', (req, res, next) => {
+router.get('/', checkAuth, (req, res, next) => {
 
     // basic structure
     // res.status(200).json({
@@ -43,7 +44,7 @@ router.get('/', (req, res, next) => {
     });
 });
 
-router.post('/', (req, res, next)=> {
+router.post('/', checkAuth, (req, res, next)=> {
 
     // Basic structure
     // const order = {
@@ -99,7 +100,7 @@ router.post('/', (req, res, next)=> {
     // });
 });
 
-router.get('/:orderId', (req, res, next) => {
+router.get('/:orderId', checkAuth, (req, res, next) => {
 
     // Basic Structure
     // res.status(200).json({
@@ -133,7 +134,7 @@ router.get('/:orderId', (req, res, next) => {
     }); 
 });
 
-router.delete('/:orderId', (req, res, next) => {
+router.delete('/:orderId', checkAuth, (req, res, next) => {
 
     // Basic structure
     // res.status(200).json({

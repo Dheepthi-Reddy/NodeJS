@@ -3,6 +3,7 @@ const router = express.Router();   // express router like a subpackage to expres
 const mongoose = require('mongoose');
 const multer = require('multer');
 // Multer is a node.js middleware for handling multipart/form-data, used for uploading files. 
+const checkAuth = require('../middleware/check-auth');
 
 const storage = multer.diskStorage({    // storage strategy
     destination: function(req, file, cb) {  // where the incoming file should be stored
@@ -76,7 +77,7 @@ router.get('/', (req, res, next) => {   //1st arg: route, 2nd arg: handler(how w
 });
 //we can not use "/products" again since we already defined it in app.js
 
-router.post('/', upload.single('productImage'), (req, res, next) => {
+router.post('/', checkAuth, upload.single('productImage'), (req, res, next) => {
 
     console.log(req.file);
 
@@ -166,7 +167,7 @@ router.get('/:productId', (req, res, next) => {
 
 });
 
-router.patch('/:productId', (req, res, next) => {   //patch used to update 
+router.patch('/:productId', checkAuth, (req, res, next) => {   //patch used to update 
 
     // basic functionality
     // res.status(200).json({
@@ -201,7 +202,7 @@ router.patch('/:productId', (req, res, next) => {   //patch used to update
     }); 
 });
 
-router.delete('/:productId', (req, res, next) => {
+router.delete('/:productId', checkAuth, (req, res, next) => {
 
     // basic functionality
     // res.status(200).json({
