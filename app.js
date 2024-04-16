@@ -39,7 +39,9 @@ mongoose.connect('mongodb+srv://dheepthireddyv:'+ process.env.MONGO_ATLAS_PSW +'
 
 app.use(morgan('dev'));
 
-app.use('/uploads',express.static('uploads')); // middleware to make the images accessible
+app.use('/uploads',express.static('uploads')); 
+// middleware to make the images accessible, 
+// url to use: http://localhost:3000/uploads/2024-04-13T04:08:20.417ZIMG_9047.PNG
 
 app.use(bodyParser.urlencoded({extended: false}));
 // here we have to parse which kind of bodies we want to parse
@@ -67,12 +69,14 @@ app.use((req, res, next) => {
 });
 
 const productRoutes = require('./api/routes/products');
-app.use('/products', productRoutes); // productRoutes is a handler
-// anything that starts with "/products" will be routed to products.js file
-
 //similarly
 const orderRoutes = require('./api/routes/orders');
+const userRoutes = require('./api/routes/user');
+
+app.use('/products', productRoutes); // productRoutes is a handler
+// anything that starts with "/products" will be routed to products.js file
 app.use('/orders', orderRoutes);
+app.use('/user', userRoutes);
 
 app.use((req, res, next) => {
     const error = new Error('Not Found');
